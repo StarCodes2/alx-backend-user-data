@@ -28,4 +28,4 @@ class RedactingFormatter(logging.Formatter):
         """ Returns a string of redacted log records. """
         rec = filter_datum(self._fields, self.REDACTION,
                            super().format(record), self.SEPARATOR)
-        return re.sub(r'' + self.SEPARATOR, self.SEPARATOR + " ", rec)
+        return re.sub(r'' + self.SEPARATOR, self.SEPARATOR + " ", rec)[:-1]
