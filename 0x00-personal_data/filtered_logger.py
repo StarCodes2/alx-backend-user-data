@@ -2,9 +2,9 @@
 """ Filtering and Logging data. """
 import re
 import logging
-from typing import List
+from typing import List, Tuple
 
-PII_FIELDS = ("name", "email", "phone", "ssn", "password")
+PII_FIELDS: Tuple[str, ...] = ("name", "email", "phone", "ssn", "password")
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -37,7 +37,8 @@ def get_logger() -> logging.Logger:
     """ Returns a logger. """
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
+    logger.propagate = False
     sh = logging.StreamHandler()
-    sh.setFormatter(RedactingFormatter(fields))
+    sh.setFormatter(RedactingFormatter(list(PII_FIELDS)))
     logger.addHandler(sh)
     return logger
