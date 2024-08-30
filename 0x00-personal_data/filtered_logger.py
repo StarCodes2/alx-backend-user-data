@@ -64,3 +64,26 @@ def get_db() -> MySQLConnection:
         database=db_name
     )
     return conn
+
+
+def main() -> None:
+    """
+        Retrieve all rows from a table and log each row while filtering
+        out sensitive information.
+    """
+    logger = get_logger()
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    rows = cursor.fetchall()
+    for row in rows:
+        msg = "; ".join("{}={}".format(col, val)
+                        for col, val in zip(cursor.column_names, row)) + ";"
+        logger.info(msg)
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
