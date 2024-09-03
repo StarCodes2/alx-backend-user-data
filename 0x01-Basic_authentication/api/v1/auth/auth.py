@@ -8,7 +8,18 @@ class Auth:
     """ Defines methods for user authentication. """
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """ require authenticaion. """
-        return False
+        if path is None or excluded_paths is None or len(excluded_paths) == 0:
+            return True
+
+        new_path = path
+        if new_path[-1] == "/":
+            new_path = new_path[:-1]
+        else:
+            new_path = new_path + "/"
+
+        if path in excluded_paths or new_path in excluded_paths:
+            return False
+        return True
 
     def authorization_header(self, request=None) -> str:
         """ Checks the request header for authentication. """
