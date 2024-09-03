@@ -50,14 +50,15 @@ class BasicAuth(Auth):
                                      user_email: str,
                                      user_pwd: str) -> TypeVar('User'):
         """ Checks if user with specified credentials exist. """
-        if user_email is None or type(user_email) != str:
+        if user_email is None or not isinstance(user_email, str):
             return None
-        if user_pwd is None or type(user_pwd) != str:
+        if user_pwd is None or not isinstance(user_pwd, str):
             return None
 
         users = User.search({"email": user_email})
-        for user in users:
-            if user.is_valid_password(user_pwd):
-                return user
+        if len(users) == 0:
+            return None
+        if users[0] and users[0].is_valid_password(user_pwd):
+            return users[0]
 
         return None
