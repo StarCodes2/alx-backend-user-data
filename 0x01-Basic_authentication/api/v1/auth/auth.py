@@ -10,6 +10,9 @@ class Auth:
         """ require authenticaion. """
         if path is None or excluded_paths is None or len(excluded_paths) == 0:
             return True
+        for e_path in excluded_paths:
+            if e_path[-1:] == "*" and path.startswith(e_path[:-1]):
+                return False
 
         new_path = path
         if new_path[-1] == "/":
