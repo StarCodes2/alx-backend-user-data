@@ -57,6 +57,7 @@ class BasicAuth(Auth):
         if user_pwd is None or not isinstance(user_pwd, str):
             return None
 
+        use = User()  # To ensure that the class name is in the Dataset
         users = User.search({"email": user_email})
         if not users or len(users) == 0:
             return None
