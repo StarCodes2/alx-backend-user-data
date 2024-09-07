@@ -21,3 +21,14 @@ class SessionAuth(Auth):
         if session_id is None and not isinstance(session_id, str):
             return None
         return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        """ Returns the current user. """
+        if request is None:
+            return None
+        cookie_id = self.session_cookie(request)
+        if cookie_id is None:
+            return None
+        user_id = self.user_id_for_session_id(cookie_id)
+        from models.user import User
+        return User.get(user_id)
