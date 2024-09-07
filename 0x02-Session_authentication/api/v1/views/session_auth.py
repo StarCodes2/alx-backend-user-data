@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Handles all routes for session authentication. """
 from api.v1.views import app_views
-from flask import jsonify, make_response, request
+from flask import abort, jsonify, make_response, request
 import os
 
 
@@ -28,3 +28,14 @@ def sessionLogin():
     resp.set_cookie(SESSION_NAME, session_id)
 
     return resp
+
+
+@app_views.route('/auth_session/logout',
+                 methods=['DELETE'], strict_slashes=False)
+def sessionLogout():
+    """ Handles session logout. """
+    from api.v1.app import auth
+    response = auth.destroy_session(request)
+    if not response:
+        abort(404)
+    return jsonify({}), 200
