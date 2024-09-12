@@ -74,3 +74,15 @@ class Auth:
             return None
 
         return user
+
+    def destroy_session(self, user_id: str) -> None:
+        """ Delete a session/logout. """
+        if not user_id:
+            return None
+
+        try:
+            self._db.update_user(user_id, session_id=session_id)
+        except NoResultFound:
+            return None
+        except ValueError:
+            return None

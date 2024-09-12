@@ -59,7 +59,11 @@ class DB:
         if not user_id:
             return None
 
-        user = self.find_user_by(id=user_id)
+        try:
+            user = self.find_user_by(id=user_id)
+        except NoResultFound:
+            raise NoResultFound()
+
         for key, value in attr.items():
             if hasattr(user, key):
                 setattr(user, key, value)
