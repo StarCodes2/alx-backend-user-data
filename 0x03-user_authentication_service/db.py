@@ -40,10 +40,13 @@ class DB:
         self._session.commit()
         return new_user
 
-    def find_user_by(self, **attributes: dict) -> User:
+    def find_user_by(self, **attr: dict) -> User:
         """ Search for a user by it attributes. """
+        if not attr or len(attr) == 0:
+            raise InvalidRequestError
+
         query = self._session.query(User)
-        for key, value in attributes.items():
+        for key, value in attr.items():
             if hasattr(User, key):
                 query = query.filter(getattr(User, key) == value)
             else:
