@@ -49,4 +49,20 @@ class DB:
             else:
                 raise InvalidRequestError()
 
-        return query.one()
+        user = query.first()
+        if not user:
+            raise NoResultFound()
+        return user
+
+    def update_user(self, user_id: int, **attr) -> None:
+        """ Updates a user in the users table. """
+        if not user_id:
+            return None
+
+        user = self.find_user_by(id=user_id)
+        for key, value in attr.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+            else:
+                self._session.rollback()
+                raise ValueError
