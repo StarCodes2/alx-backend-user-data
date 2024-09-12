@@ -42,17 +42,11 @@ class DB:
 
     def find_user_by(self, **attr: dict) -> User:
         """ Search for a user by it attributes. """
-        if not attr or len(attr) == 0:
-            raise InvalidRequestError
-
         query = self._session.query(User)
         for key, value in attr.items():
             if hasattr(User, key):
                 query = query.filter(getattr(User, key) == value)
             else:
-                raise InvalidRequestError
+                raise InvalidRequestError()
 
-        user = query.first()
-        if not user:
-            raise NoResultFound
-        return user
+        return query.one()
