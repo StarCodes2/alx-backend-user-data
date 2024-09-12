@@ -64,10 +64,10 @@ def logout():
     if not session_id:
         return jsonify({"error": "missing data"}), 400
     user = AUTH.get_user_from_session_id(session_id)
-    if user:
-        AUTH.destory_session(user.id)
-        return redirect(url_for("home"))
-    return jsonify({"error": "session not found"}), 403
+    if not user:
+        abort(403)
+    AUTH.destory_session(user.id)
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":
