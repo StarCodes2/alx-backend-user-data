@@ -2,8 +2,10 @@
 """DB module
 """
 from sqlalchemy import create_engine
+from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.session import Session
 from user import User, Base
 
@@ -37,3 +39,17 @@ class DB:
         self._session.add(new_user)
         self._session.commit()
         return new_user
+
+    def find_user_by(self, **attributes: dict) -> User:
+        """ Search for a user by it attributes. """
+        query = self._session.query(User)
+        for key, value in attributes.items():
+            if hasattr(User, key):
+                query = query.filter(getattr(User, key) == value)
+            else:
+                raise InvalidRequestError
+
+        user = query.first()
+        if not user:
+            raise NoResultFound
+        return user
