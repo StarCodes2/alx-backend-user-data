@@ -40,7 +40,7 @@ class DB:
         self._session.commit()
         return new_user
 
-    def find_user_by(self, **attr: dict) -> User:
+    def find_user_by(self, **attr) -> User:
         """ Search for a user by it attributes. """
         query = self._session.query(User)
         for key, value in attr.items():
