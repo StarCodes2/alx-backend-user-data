@@ -66,3 +66,4 @@ class DB:
             else:
                 self._session.rollback()
                 raise ValueError
+        self._session.commit()
