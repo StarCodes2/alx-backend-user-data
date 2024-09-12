@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Model to authenticate and register a user. """
 import bcrypt
+import uuid
 from db import DB, User, NoResultFound
 
 
@@ -11,6 +12,11 @@ def _hash_password(password: str) -> bytes:
     text = password.encode()
 
     return bcrypt.hashpw(text, bcrypt.gensalt())
+
+
+def _generate_uuid() -> str:
+    """ Generate a uuid and return a string represenation of the uuid. """
+    return str(uuid.uuid4())
 
 
 class Auth:
