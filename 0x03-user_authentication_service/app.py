@@ -92,7 +92,24 @@ def get_reset_password_token():
         token = AUTH.get_reset_password_token(email)
     except ValueError:
         return jsonify({"error": "Forbidden"}), 403
-    return jsonify({"email": email, "reset_token": token})
+    return jsonify({"email": email, "reset_token": token}), 200
+
+
+@app.route("/reset_password", methods=["PUT"], strict_slashes=False)
+def update_password():
+    """ Update user password. """
+    email = request.form.get("email")
+    token = request.form.get("reset_token")
+    new_password = request.form.get("new_password")
+    if not email or not token or not new_password:
+        return jsonify({"error": "Forbidden"}), 403
+
+    try:
+        AUTH.update_password(token, new_password)
+    except ValueError:
+        return jsonify({"error": "Forbidden"}), 403
+
+    return jsonify({"email": email, "message": "Password updated"}), 200
 
 
 if __name__ == "__main__":
