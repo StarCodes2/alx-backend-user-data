@@ -89,7 +89,7 @@ def get_reset_password_token():
     if not email:
         return jsonify({"error": "Forbidden"}), 403
     try:
-        token = self.AUTH.get_reset_password_token(email)
+        token = AUTH.get_reset_password_token(email)
     except ValueError:
         return jsonify({"error": "Forbidden"}), 403
     return jsonify({"email": email, "reset_token": token})
