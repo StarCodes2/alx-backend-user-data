@@ -76,7 +76,6 @@ def profile():
     session_id = request.cookies.get("session_id", None)
     if not session_id:
         return jsonify({"error": "Forbidden"}), 403
-    print("step 1")
     user = AUTH.get_user_from_session_id(session_id)
     if not user:
         return jsonify({"error": "Forbidden"}), 403
