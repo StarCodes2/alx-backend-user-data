@@ -27,17 +27,13 @@ class SessionDBAuth(SessionExpAuth):
         """
         if not session_id:
             return None
-        print("Step 1")
 
         try:
             user_session = UserSession.search({"session_id": session_id})
         except KeyError:
             return None
-        print("Step 2")
-        print(user_session)
         if not user_session:
             return None
-        print("Step 3")
         return user_session[0].user_id
 
     def destroy_session(self, request=None):
