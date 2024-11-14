@@ -2,6 +2,7 @@
 """ Defines the class SessionDBAuth. """
 from api.v1.auth.session_exp_auth import SessionExpAuth
 from models.user_session import UserSession
+from datetime import datetime, timedelta
 
 
 class SessionDBAuth(SessionExpAuth):
@@ -34,6 +35,12 @@ class SessionDBAuth(SessionExpAuth):
             return None
         if not user_session:
             return None
+
+        if datetime.now() > user_session[0].created_at +\
+            timedelta(seconds=self.session_duration)\
+                and self.session_duration > 0:
+            return None
+
         return user_session[0].user_id
 
     def destroy_session(self, request=None):
